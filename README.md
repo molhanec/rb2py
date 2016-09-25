@@ -2,9 +2,9 @@
 
 Contact me
 
-E-mail: michal AT molhanec DOT net
-Web: http://molhanec.net/
-This project: https://github.com/molhanec/rb2py/
+* E-mail: michal AT molhanec DOT net
+* Web: http://molhanec.net/
+* This project: https://github.com/molhanec/rb2py/
 
 ## Licence
 
