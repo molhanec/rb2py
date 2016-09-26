@@ -30,7 +30,7 @@ module AndOrPyfix
           ExpressionNode,
           OrNode # must precede OrAssignNode test, because OrAssignNode inherits from OrNode
           then
-          # we cannot decide for these node classes, silently fall outside case
+          # we cannot decide for these node classes, silently fall outside case and continue search in parent
 
         # We need value of and/or
         when
