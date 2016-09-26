@@ -1,4 +1,11 @@
-# Logical and/or operators
+# Logical and/or operators.
+#
+#   a() and/or b()
+# ==>
+#   ruby_true(a()) and/or ruby_true(b())
+#
+# This works only when we are not interested in the value per se, only true/false result.
+# For cases when value is important see pyfixes/and_or.rb
 
 class AndNode
   def real_gen
