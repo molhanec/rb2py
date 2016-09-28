@@ -22,7 +22,7 @@ class RegoptNode
     python_flags = []
     for flag in children
       flag.expect_symbol
-      # Throw exception if unknown flag
+      # Throws an exception if unknown flag
       python_flag = REGEXP_FLAG_MAP.fetch flag.value
       python_flags << python_flag if python_flag
     end
