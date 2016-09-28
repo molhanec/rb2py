@@ -254,7 +254,6 @@ def count1(array, object):
     return count
 
 
-# def create_regexp(pattern, flags = re.ASCII + re.MULTILINE):
 def create_regexp(pattern, flags = 0):
     # These two flags apply always in Ruby regexps:
     #   Make \w, \W, \d, \D, \s and \S ASCII only.
