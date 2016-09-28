@@ -102,7 +102,7 @@ def special_implementation(cls, function):
 # Translations
 # Name
 #   original_nameArgument_count
-#   or original_name for any number of arguments
+#   or just the original_name for any number of arguments
 # They mostly works like this:
 #   if it is known translation then translate otherwise expects that it is normal method
 
