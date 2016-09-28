@@ -16,7 +16,6 @@ import rb2py.Encoding
 from rb2py.error import *
 from rb2py.exception import Exception
 from rb2py.file import File
-from rb2py.hash import Hash
 from rb2py.string import String
 from rb2py.stringio import StringIO
 from rb2py.struct import Struct
@@ -44,7 +43,7 @@ NumberABC = numbers.Number
 
 # Globals
 
-env = Hash()
+env = OrderedDict()
 for name, value in os.environ.items():
     env[String(name)] = String(value)
 
@@ -167,6 +166,7 @@ def array_empty(array):
 
 def array_first(array):
     return array[0] if len(array) > 0 else None
+
 
 def array_last(array):
     return array[-1] if len(array) > 0 else None
