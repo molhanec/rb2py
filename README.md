@@ -33,3 +33,14 @@ All other code is written by Michal Molhanec and it's available under the zlib l
   2. Altered source versions must be plainly marked as such, and must not be
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
+
+## Used coding style for Ruby
+* single line between methods inside class
+* two lines between classes/functions on the module level
+* group "end"s, ie. don't put newline between "end"s, ever :)
+* {} even for multiline blocks
+* (method arguments) instead of method(arguments) if parens are necessary
+* I slightly prefer for-in to each. Probably Pythonism :)
+* distinguish functions a procedures: method should either return a value or change external state of an object, not both (it can change purely internal things like caches and buffers) 
+* oneliners without return, every other method returning useful value with explicit return
+ 
