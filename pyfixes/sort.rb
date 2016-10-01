@@ -15,7 +15,7 @@ class SortNode
     block_def = BlockEmulationDefNode.new ruby_node, block_name, arguments, statements
     block_def.true_method = false
 
-    # list(sorted(x, functools.cmp_to_key(_block_XXXX)))
+    # list(sorted(x, key=functools.cmp_to_key(_block_XXXX)))
     $pygen.imports << 'functools'
     cmp_to_key_call = make_custom_target_call 'functools', 'cmp_to_key', block_name
     sorted_call = make_global_call 'sorted', target, (PythonKeyedArgument.new 'key', cmp_to_key_call)
