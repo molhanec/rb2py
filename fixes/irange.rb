@@ -1,5 +1,6 @@
 class UnprocessedNode
   # this one is different: we work on the level above irange which should be begin sexpr
+
   def fix_irange_in_begin
     if symbol? 'begin' and children.size == 1 and child.symbol? 'irange'
       return IRangeNode.new child
