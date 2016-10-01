@@ -7,8 +7,6 @@
 #
 # Does not handle uninitialized instance variables.
 
-require_relative 'op_index_in_assign'
-
 class OrAssignNode
 
   def transform_left
