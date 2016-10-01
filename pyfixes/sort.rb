@@ -2,7 +2,7 @@
 # ==>
 #   def _block_XXXX(a, b):
 #     return rb2py.cmp1(a, b)
-#   list(sorted(x, functools.cmp_to_key(_block_XXXX)))
+#   list(sorted(x, key=functools.cmp_to_key(_block_XXXX)))
 
 
 class SortNode
