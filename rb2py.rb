@@ -77,6 +77,12 @@ end
 $single_fix_was_run = 0
 
 
+$indent = 0
+def indent_str
+  '  ' * $indent
+end
+
+
 def rb2ast(filename)
   filename = $SRC_PATH ? "#$SRC_PATH\\#{filename}.rb" : filename + '.rb'
   Parser::CurrentRuby.parse_file(filename)
