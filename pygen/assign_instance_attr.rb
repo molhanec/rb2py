@@ -16,11 +16,15 @@ class AssignInstanceAttrNode
   end
 
   def gen_static
-    target.expect_class SelfNode
-    outer = find_surrounding DefNode, ClassNode
-    if outer.is_a? DefNode
-      cls = find_surrounding ClassNode
-      $pygen.write "#{cls.name}."
+    if target.is_a? SelfNode
+      outer = find_surrounding DefNode, ClassNode
+      if outer.is_a? DefNode
+        cls = find_surrounding ClassNode
+        $pygen.write "#{cls.name}."
+      end
+    else
+      target.gen
+      $pygen.write "."
     end
     $pygen.write "_#{name} = "
     value.gen
