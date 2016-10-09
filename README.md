@@ -1,6 +1,9 @@
 
 # Experimental Ruby to Python 3 translator
 
+Currently very far from production-ready state, more like a toy for experiments.
+That said, it is however able to translate Ruby Prawn library for generating PDF files and the produced library is able to produce simple PDF files. See Example section below. 
+
 Contact me
 
 * E-mail: michal AT molhanec DOT net
