@@ -6,14 +6,14 @@ class ModuleOrPackageNode
         gen_topmost_module_import
         gen_imports_for_subpackages
         gen_imports
-        gen_children
+        gen_children { $pygen.indent }
       }
     else
       $pygen.open_module(name) {
         gen_topmost_module_import
         gen_imports_for_subpackages
         gen_imports
-        gen_children
+        gen_children { $pygen.indent }
       }
     end
   end
