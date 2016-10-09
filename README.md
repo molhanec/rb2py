@@ -9,6 +9,11 @@ Contact me
 
 ## Licence
 
+prawn-ruby folder contains the original Prawn PDF library used as an example.
+See Example section. Code in this folder (except for patches documented
+in patches.txt) was written by Prawn library authors and is distributed
+under the Prawn library licence (see COPYING files in the subfolders).
+
 Python code in rb2py folder is partly based on Python 3 standard library code.
 Notably:
   struct.py
