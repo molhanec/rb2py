@@ -90,11 +90,13 @@ end
 
 
 def save_ast(ast, filename)
-  filepath = "ast\\#{filename.gsub('\\', '-')}.txt"
-  FileUtils.makedirs (File.dirname filepath)
-  File.open filepath, 'wt' do
+  if $SAVE_AST
+    filepath = "ast\\#{filename.gsub('\\', '-')}.txt"
+    FileUtils.makedirs (File.dirname filepath)
+    File.open filepath, 'wt' do
     |file|
-    file.write ast
+      file.write ast
+    end
   end
 end
 
