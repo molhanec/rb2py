@@ -1,0 +1,128 @@
+This is the Prawn PDF library, patched for rb2py translator.
+
+All the copyrights go to the original authors.
+
+#####################################################################
+pdf-core-0.6.0\lib\pdf\core\reference.rb
+#####################################################################
+--- reference.rb.original       2016-10-02 09:25:23 +0000
++++ reference.rb        2016-10-02 12:45:59 +0000
+@@ -13,7 +13,7 @@
+
+       attr_accessor :gen, :data, :offset, :stream, :identifier
+
+-      def initialize(id, data)
++      def initialize(id, data, &block)
+         @identifier = id
+         @gen        = 0
+         @data       = data
+#####################################################################
+
+#####################################################################
+pdf-core-0.6.0\lib\pdf\core\renderer.rb
+#####################################################################
+--- renderer.rb.original        2016-10-02 09:25:23 +0000
++++ renderer.rb 2016-10-02 13:02:03 +0000
+@@ -148,7 +148,7 @@
+       # Renders the PDF document to string.
+       # Pass an open file descriptor to render to file.
+       #
+-      def render(output = StringIO.new)
++      def render(output = StringIO.new, &block)
+         if output.instance_of?(StringIO)
+           output.set_encoding(::Encoding::ASCII_8BIT)
+         end
+#####################################################################
+
+#####################################################################
+New file instead of the original prawn-2.0.3\lib\prawn.rb:
+prawn-2.0.3\lib\prawn_rb2py.rb
+#####################################################################
+
+#####################################################################
+Completely rewritten:
+prawn-2.0.3\lib\prawn\utilities.rb
+Removed thread awareness for rb2py (threads currently not supported)
+#####################################################################
+
+#####################################################################
+prawn-2.0.3\lib\prawn\repeater.rb
+#####################################################################
+--- repeater.rb.original        2016-10-02 09:25:32 +0000
++++ repeater.rb 2016-10-02 12:17:04 +0000
+@@ -99,7 +99,7 @@
+       @block = block if dynamic
+       @graphic_state = document.state.page.graphic_state.dup
+
+-      Repeater.count += 1
++      Repeater.count = Repeater.count + 1
+     end
+
+     def match?(page_number)
+#####################################################################
+
+
+#####################################################################
+prawn-2.0.3\lib\prawn\graphics.rb
+class_eval currently unsupported
+#####################################################################
+--- graphics.rb.original        2016-10-02 09:25:32 +0000
++++ graphics.rb 2016-10-02 12:28:15 +0000
+@@ -596,9 +596,54 @@
+     shapes = %w{line_to curve_to rectangle rounded_rectangle line horizontal_line horizontal_rule vertical_line
+                 curve circle_at circle ellipse_at ellipse polygon rounded_polygon rounded_vertex}
+
+-    ops.product(shapes).each do |operation, shape|
+-      class_eval "def #{operation}_#{shape}(*args); #{shape}(*args); #{operation}; end"
+-    end
++def fill_line_to(*args); line_to(*args); fill; end
++def fill_curve_to(*args); curve_to(*args); fill; end
++def fill_rectangle(*args); rectangle(*args); fill; end
++def fill_rounded_rectangle(*args); rounded_rectangle(*args); fill; end
++def fill_line(*args); line(*args); fill; end
++def fill_horizontal_line(*args); horizontal_line(*args); fill; end
++def fill_horizontal_rule(*args); horizontal_rule(*args); fill; end
++def fill_vertical_line(*args); vertical_line(*args); fill; end
++def fill_curve(*args); curve(*args); fill; end
++def fill_circle_at(*args); circle_at(*args); fill; end
++def fill_circle(*args); circle(*args); fill; end
++def fill_ellipse_at(*args); ellipse_at(*args); fill; end
++def fill_ellipse(*args); ellipse(*args); fill; end
++def fill_polygon(*args); polygon(*args); fill; end
++def fill_rounded_polygon(*args); rounded_polygon(*args); fill; end
++def fill_rounded_vertex(*args); rounded_vertex(*args); fill; end
++def stroke_line_to(*args); line_to(*args); stroke; end
++def stroke_curve_to(*args); curve_to(*args); stroke; end
++def stroke_rectangle(*args); rectangle(*args); stroke; end
++def stroke_rounded_rectangle(*args); rounded_rectangle(*args); stroke; end
++def stroke_line(*args); line(*args); stroke; end
++def stroke_horizontal_line(*args); horizontal_line(*args); stroke; end
++def stroke_horizontal_rule(*args); horizontal_rule(*args); stroke; end
++def stroke_vertical_line(*args); vertical_line(*args); stroke; end
++def stroke_curve(*args); curve(*args); stroke; end
++def stroke_circle_at(*args); circle_at(*args); stroke; end
++def stroke_circle(*args); circle(*args); stroke; end
++def stroke_ellipse_at(*args); ellipse_at(*args); stroke; end
++def stroke_ellipse(*args); ellipse(*args); stroke; end
++def stroke_polygon(*args); polygon(*args); stroke; end
++def stroke_rounded_polygon(*args); rounded_polygon(*args); stroke; end
++def stroke_rounded_vertex(*args); rounded_vertex(*args); stroke; end
++def fill_and_stroke_line_to(*args); line_to(*args); fill_and_stroke; end
++def fill_and_stroke_curve_to(*args); curve_to(*args); fill_and_stroke; end
++def fill_and_stroke_rectangle(*args); rectangle(*args); fill_and_stroke; end
++def fill_and_stroke_rounded_rectangle(*args); rounded_rectangle(*args); fill_and_stroke; end
++def fill_and_stroke_line(*args); line(*args); fill_and_stroke; end
++def fill_and_stroke_horizontal_line(*args); horizontal_line(*args); fill_and_stroke; end
++def fill_and_stroke_horizontal_rule(*args); horizontal_rule(*args); fill_and_stroke; end
++def fill_and_stroke_vertical_line(*args); vertical_line(*args); fill_and_stroke; end
++def fill_and_stroke_curve(*args); curve(*args); fill_and_stroke; end
++def fill_and_stroke_circle_at(*args); circle_at(*args); fill_and_stroke; end
++def fill_and_stroke_circle(*args); circle(*args); fill_and_stroke; end
++def fill_and_stroke_ellipse_at(*args); ellipse_at(*args); fill_and_stroke; end
++def fill_and_stroke_ellipse(*args); ellipse(*args); fill_and_stroke; end
++def fill_and_stroke_polygon(*args); polygon(*args); fill_and_stroke; end
++def fill_and_stroke_rounded_polygon(*args); rounded_polygon(*args); fill_and_stroke; end
++def fill_and_stroke_rounded_vertex(*args); rounded_vertex(*args); fill_and_stroke; end
+
+     private
+#####################################################################

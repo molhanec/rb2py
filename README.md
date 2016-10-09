@@ -1,3 +1,4 @@
+
 # Experimental Ruby to Python 3 translator
 
 Contact me
@@ -33,6 +34,44 @@ All other code is written by Michal Molhanec and it's available under the zlib l
   2. Altered source versions must be plainly marked as such, and must not be
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
+
+## Requirements
+
+Generally, the translator requires Ruby 2.2 or higher, or corresponding JRuby
+and the translated code should work with Python 3.5 or higher.
+
+For Ruby, whitequark's Parser is required https://github.com/whitequark/parser/ 
+
+Note that the latest version does not parse Prawn library, because Prawn has some 
+strings which are not valid in UTF-8. So I recommend version 2.3.0.1:
+
+    gem install parser -v 2.3.0.1
+
+If the translated code uses Time class, tzlocal package is required for Python 3:
+    
+    pip install tzlocal
+
+## Example 
+
+There is currently single example and that is Prawn PDF library https://github.com/prawnpdf/prawn
+
+The Prawn library is placed in prawn-ruby folder.
+It needed few patches which are described in prawn-ruby/patches.txt.
+The library in that folder is already patched!
+
+You can run the translation using example_prawn.rb script:
+
+    ruby example_prawn.rb
+
+Results will be put in the prawn-python folder.
+**prawn-python folder is always completely deleted before translation!**
+
+If everything went OK, you can try to use the translated library
+by running:
+
+    python hello.py
+    
+which should generate hello.pdf file. 
 
 ## Used coding style for Ruby
 * single line between methods inside class
