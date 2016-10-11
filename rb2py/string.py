@@ -430,7 +430,7 @@ class String:
     #
     # rb2py_regexp_captures is an array where rb2py_regexp_captures[1], rb2py_regexp_captures[2]... corresponds
     # to $1, $2... method-local Ruby variables (group captures)
-    def match(self, regexp, regexp_captures):
+    def match(self, regexp, regexp_captures=None):
         self._ensure_encoded_str()
         if regexp_captures is not None:
             regexp_captures.clear()

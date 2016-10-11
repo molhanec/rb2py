@@ -182,13 +182,14 @@ def call(fun, *args, **kwargs):
 # or
 #   left === right
 @emulated('case_cmp')
-def case_cmp(right, left):
-    # if cmp_against_symbol? left
-    # return make_rb2py_call 'is_symbol', right
-    if isclass(right):
-        return isinstance(left, right)
+def case_cmp(left, right, regexp_captures=None):
+    if is_symbol(right) or is_string(right) or isinstance(right, list):
+        return right == left
     elif isinstance(right, re._pattern_type):
-        return left.match(right) is None
+        return left.match(right, regexp_captures) is not None
+    w("Unknown case_cmp (=== emulation) for {}".format(type(right)))
+    import sys
+    sys.exit()
     return right == left
 
 
@@ -399,7 +400,7 @@ each_value1 = each_value0
 # Iterates the given block for each element with an arbitrary object given, and returns the initially given object.
 @emulated('each_with_object')
 def each_with_object(array, object, block):
-    for item in array:
+    for item in each(array):
         block(item, object)
     return object
 
