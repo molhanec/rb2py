@@ -183,13 +183,8 @@ def call(fun, *args, **kwargs):
 #   left === right
 @emulated('case_cmp')
 def case_cmp(left, right, regexp_captures=None):
-    if is_symbol(right) or is_string(right) or isinstance(right, list):
-        return right == left
-    elif isinstance(right, re._pattern_type):
+    if isinstance(right, re._pattern_type):
         return left.match(right, regexp_captures) is not None
-    w("Unknown case_cmp (=== emulation) for {}".format(type(right)))
-    import sys
-    sys.exit()
     return right == left
 
 
