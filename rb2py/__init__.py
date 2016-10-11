@@ -1145,7 +1145,8 @@ def to_f0(object):
 
 # object.to_i -> integer
 def to_i0(object):
-    if isinstance(object, str):
+    if isinstance(object, str) or isinstance(object, String):
+        object = str(object) # convert String to str
         # Ruby allows arbitrary characters after string
         string = object.strip()
         while len(string):
