@@ -85,6 +85,7 @@ CUSTOM_METHODS_CALL = {
     'to_sym' => [0],
     'uniq' => [0],
     'unpack' => [1],
+    'unshift' => [:n],
     'upcase' => [0],
     'update' => [1],
     'valid_encoding?' => [0],

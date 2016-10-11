@@ -1226,6 +1226,14 @@ def unpack1(string, format):
     raise Rb2PyNotImplementedError('unpack')
 
 
+# array.unshift(object1, object2...) -> array
+# unshift(obj, ...) → ary click to toggle source
+# Prepends objects to the front of the array, moving other elements upwards.
+def unshift(array, *objects):
+    array[0:0] = objects
+    return array
+
+
 # hash1.update(hash2) -> hash1
 # @emulated('update')
 # Python's dict has "update" method so we cannot use emulated decorator, because it would return None.
