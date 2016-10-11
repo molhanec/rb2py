@@ -9,6 +9,10 @@ module CaseConditionPyfix
       instance_test = InstanceTestNode.new ruby_node, [right, left]
       return instance_test
     end
+    def_node = find_surrounding DefNode
+    if def_node.regexp_captures
+      return make_rb2py_call 'case_cmp', right, left, "rb2py_regexp_captures"
+    end
     return make_rb2py_call 'case_cmp', right, left
   end
 
