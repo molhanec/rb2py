@@ -242,6 +242,7 @@ class String:
     def bytes(self):
         self._ensure_bytes()
         return self._bytes
+    each_byte = bytes
 
     # Instantiate String from text which corresponds to Ruby's rules for double quoted strings,
     # which slightly differ from those for Python normal strings.

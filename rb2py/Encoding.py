@@ -7,6 +7,7 @@ US_ASCII = 'ascii'
 UTF_16BE = 'utf_16_be'
 UTF_8 = 'utf_8'
 WINDOWS_1252 = 'cp1252'
+Windows_1252 = 'cp1252'
 
 class InvalidByteSequenceError(Rb2PyRuntimeError):
     pass

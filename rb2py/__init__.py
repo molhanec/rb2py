@@ -864,11 +864,11 @@ def pack1(sequence, format):
 # Returns two arrays, the first containing the elements of enum for which the block evaluates to true,
 # the second containing the rest.
 @emulated('partition')
-def partition(predicate, array):
+def partition(array, block):
     true_array = []
     false_array = []
     for item in array:
-        if predicate(item):
+        if block(item):
             true_array.append(item)
         else:
             false_array.append(item)
