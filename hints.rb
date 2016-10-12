@@ -17,6 +17,7 @@ $HINTS_MODULE = %w[
   Reader
   SoftMask
   Stamp
+  Subset
   Text
   Transformation
   TransformationStack
@@ -50,6 +51,7 @@ $HINTS_FLATTEN_CLASSES = %w[
   Prawn::Images::JPG
   Prawn::Images::PNG
 
+  TTFunk::Subset::Base
   TTFunk::Table::Post::Format10
   TTFunk::Table::Post::Format20
   TTFunk::Table::Post::Format30
