@@ -23,7 +23,7 @@ class InjectNode
     global_target = NewValueNode.new nil, 'functools'
     $pygen.imports << 'functools'
     arg1 = NewValueNode.new nil, block_name
-    arg2 = target
+    arg2 = make_rb2py_call 'each', target
     arg3 = initial
     call = SendNode.new ruby_node:ruby_node, target:global_target, message_name:'reduce', arguments:[arg1, arg2, arg3]
 
