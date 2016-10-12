@@ -20,7 +20,7 @@ _repr_template = '{name}=%r'
 _argument_template = '{name}=None'
 
 _field_setup_template = '''\
-        self.{name} = {name}
+        self._{name} = {name}
 '''
 
 _getter_template = '''\

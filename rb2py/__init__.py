@@ -16,6 +16,7 @@ import rb2py.Encoding
 from rb2py.error import *
 from rb2py.exception import Exception
 from rb2py.file import File
+from rb2py.hash import Hash
 from rb2py.string import String
 from rb2py.stringio import StringIO
 from rb2py.struct import Struct
@@ -186,6 +187,10 @@ def case_cmp(left, right, regexp_captures=None):
     if isinstance(right, re._pattern_type):
         return left.match(right, regexp_captures) is not None
     return right == left
+
+
+def chr0(integer):
+    return String(chr(integer))
 
 
 # array.collect(function) -> new_array
@@ -1251,6 +1256,10 @@ def update1(hash1, hash2):
 @emulated('upcase')
 def upcase0(string):
     return string.upper()
+
+
+def warn1(msg):
+    w(msg)
 
 
 # array.zip(object) -> new_array

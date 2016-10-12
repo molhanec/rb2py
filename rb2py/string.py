@@ -49,6 +49,8 @@ class String:
             if isinstance(other, String):
                 self._encoded_str = copy(other._encoded_str)
                 self._encoding = other._encoding
+                if self._encoding == "ASCII-8BIT":
+                    self._encoding = "latin1"
                 self._bytes = copy(other._bytes)
                 self._hash = other._hash
             elif isinstance(other, Bytes):
@@ -221,6 +223,17 @@ class String:
         self._ensure_bytes()
         return len(self._bytes)
 
+    # string.chomp(separator=$/) -> new_string
+    # Returns a new String with the given record separator removed from the end of str (if present).
+    # If $/ has not been changed from the default Ruby record separator,
+    # then chomp also removes carriage return characters (that is it will remove \n, \r, and \r\n).
+    # If $/ is an empty string, it will remove all trailing newlines from the string.
+    def chomp(self):
+        self._ensure_encoded_str()
+        new_str = self._encoded_str.lstrip("\n\r")
+        result = String(new_str, encoding=self._encoding)
+        return result
+
     # string.chop() -> string
     # Returns a new String with the last character removed. If the string ends
     # with \r\n, both characters are removed. Applying chop to an empty string
@@ -243,6 +256,11 @@ class String:
         self._ensure_bytes()
         return self._bytes
     each_byte = bytes
+
+    def codepoints(self):
+        self._ensure_encoded_str()
+        return [ord(c) for c in self._encoded_str]
+    each_codepoint = codepoints
 
     # Instantiate String from text which corresponds to Ruby's rules for double quoted strings,
     # which slightly differ from those for Python normal strings.
@@ -345,6 +363,8 @@ class String:
     def _set_encoding(self, encoding):
         self._ensure_encoded_str()
         self._bytes = None
+        if encoding == "ASCII-8BIT":
+            encoding = "latin1"
         self._encoding = encoding
         self._ensure_bytes()
 
@@ -352,6 +372,8 @@ class String:
         return self
 
     def force_encoding(self, encoding):
+        if encoding == "ASCII-8BIT":
+            encoding = "latin1"
         self._encoding = encoding
         if self._bytes is None:
             self._bytes = [ord(char) for char in self._encoded_str]
@@ -553,6 +575,10 @@ class String:
             result.pop()
 
         return [String(chunk, encoding=self._encoding) for chunk in result]
+
+    def is_start_with(self, other):
+        self._ensure_encoded_str()
+        return self._encoded_str.startswith(str(other))
 
     @staticmethod
     def is_string(object):
