@@ -11,13 +11,18 @@ class ConstantNode
       # If we are in a method then prefix constant with "self."
       while current = current.parent
         if current.is_a? DefNode
-          $pygen.write "self."
+          if current.is_a? DefSingletonNode
+            cls = find_surrounding ClassNode
+            $pygen.write "#{$pygen.py_class_name cls.fullname.to_s}."
+          else
+            $pygen.write "self."
+          end
           break
         end
       end
     end
 
-    $pygen.write $pygen.py_class_name(name.to_s)
+    $pygen.write ($pygen.py_class_name name.to_s)
   end
 end
 
