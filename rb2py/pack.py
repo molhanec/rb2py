@@ -59,10 +59,26 @@ PACKERS['a'] = Packer_a
 
 
 class Packer_A(Packer):
-    " A         | String  | arbitrary binary string (remove trailing nulls and ASCII spaces)"
+    """
+    A         | String  | pack: arbitrary binary string (space padded, count is width)
+    A         | String  | unpack: arbitrary binary string (remove trailing nulls and ASCII spaces)"""
 
     def __init__(self):
         super().__init__('A', 1)
+
+    def pack(self, array, result):
+        string = rb2py.String(array[0])
+        self.total_count = 1
+        string._ensure_bytes()
+        if self.count == '*':
+            total_count = len(string)
+        else:
+            total_count = min(self.count, len(string))
+        for i in range(total_count):
+            result.append_byte(string._bytes[i])
+        if self.count != "*":
+            for i in range(self.count - total_count):
+                result.append_byte(ord(" "))
 
     def unpack_single(self, bytes):
         return chr(bytes[0])
@@ -180,6 +196,21 @@ class Packer_n(Packer):
     def __init__(self):
         super().__init__('n', 2)
 
+    def pack(self, array, result):
+        if self.count == '*':
+            self.total_count = len(array)
+        else:
+            self.total_count = min(self.count, len(array))
+        for i in range(self.total_count):
+            integer = array[i]
+            if integer < 0:
+                integer += 2**16
+            if not(0 <= integer < 2**16):
+                raise Rb2PyValueError("array.pack('n'): '{}' is not a 16-bit unsigned number!".format(integer))
+            a, b = divmod(integer, 256)
+            result.append_byte(a)
+            result.append_byte(b)
+
     def unpack_single(self, bytes):
         a, b = bytes
         return (a << 8) + b
@@ -192,6 +223,25 @@ class Packer_N(Packer):
 
     def __init__(self):
         super().__init__('N', 4)
+
+    def pack(self, array, result):
+        if self.count == '*':
+            self.total_count = len(array)
+        else:
+            self.total_count = min(self.count, len(array))
+        for i in range(self.total_count):
+            integer = array[i]
+            if integer < 0:
+                integer += 2**32
+            if not(0 <= integer < 2**32):
+                raise Rb2PyValueError("array.pack('n'): '{}' is not a 32-bit unsigned number!".format(integer))
+            a, integer = divmod(integer, 2**24)
+            b, integer = divmod(integer, 2**16)
+            c, d = divmod(integer, 2**8)
+            result.append_byte(a)
+            result.append_byte(b)
+            result.append_byte(c)
+            result.append_byte(d)
 
     def unpack_single(self, bytes):
         a, b, c, d = bytes
