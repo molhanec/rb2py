@@ -66,16 +66,21 @@ def w(msg):
 
 # Decorators
 
-def emulated(name):
+def emulated(name, *, exception=None):
     """Decorator for emulated methods.
     First tries to see if the target object does not implement the method
     explicitely. If so, it is called.
     Otherwise calls the emulating function.
+
+    :exception argument is type (or tuple of types) for which you want explicitely always call emulated function.
+    This is for cases, where Python's built-in types have method of same name.
     """
     def wrap(emulate):
         def try_to_call(*args, **kwargs):
             # first argument is always the original target
             original_target = args[0]
+            if exception and isinstance(original_target, exception):
+                return emulate(*args, **kwargs)
             method = responds_to(original_target, name)
             return method(*args[1:], **kwargs) if method else emulate(*args, **kwargs)
         return try_to_call
@@ -596,7 +601,7 @@ def hash0(object):
 
 
 # list.index(value) -> int/nil
-@emulated('index')
+@emulated('index', exception=list)
 def index1(collection, value):
     if value in collection:
         return collection.index(value)
@@ -948,7 +953,7 @@ def is_respond_to1(object, method_name):
 
 # array.reverse -> new_array
 # Returns a new array containing self's elements in reverse order.
-# Cannot have @emulated('reverse') because list has reverse() method which reverses list in place and returns None.
+@emulated('reverse', exception=list) # list has reverse() method which reverses list in place and returns None.
 def reverse0(array):
     return list(reversed(array))
 
@@ -1012,13 +1017,18 @@ def send1(object, symbol, *args):
 def set_index(collection, *indices_and_value):
     indices = indices_and_value[:-1] # all but last
     value = indices_and_value[-1]
-    if len(indices) == 1:
+    indices_count = len(indices)
+    if indices_count == 1:
         index = indices[0]
         if isinstance(index, list): # list is not hashable
             index = tuple(index)
         collection[index] = value
+    # elif indices_count == 2: # start and count
+    #     start = indices[0]
+    #     stop = start + indices[1]
+    #     collection[start:stop] = value
     else:
-        raise Rb2PyNotImplementedError('set_index with %s indices' + len(indices))
+        raise Rb2PyNotImplementedError('set_index with {} indices'.format(indices_count))
     return value
 
 
@@ -1064,8 +1074,8 @@ def size0(collection):
     return len(collection)
 
 
-# array.sort() -> sorted array
-@emulated('sort')
+# array.sort() -> new sorted array
+@emulated('sort', exception=list) # Python's list has sort method, which sorts list in place and return None.
 def sort0(array):
     return list(sorted(array))
 
@@ -1211,9 +1221,9 @@ def to_sym0(object):
     return symbolcls.to_sym(object)
 
 
-# array.unique -> array
-@emulated('unique')
-def unique0(array):
+# array.uniq -> array
+@emulated('uniq')
+def uniq0(array):
     new_array = []
     seen = set()
     for item in array:
@@ -1240,8 +1250,7 @@ def unshift(array, *objects):
 
 
 # hash1.update(hash2) -> hash1
-# @emulated('update')
-# Python's dict has "update" method so we cannot use emulated decorator, because it would return None.
+@emulated('update', exception=dict) # Python's dict has "update" method which returns None.
 def update1(hash1, hash2):
     if isinstance(hash1, dict):
         hash1.update(hash2)

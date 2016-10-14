@@ -105,6 +105,23 @@ class String:
         else:
             return String(bytes=self._bytes.__getitem__(index), encoding=self._encoding)
 
+    def set_index(self, *args):
+        value = args[-1]
+        value._ensure_encoded_str()
+        self._ensure_encoded_str()
+        arg_count = len(args)
+        if arg_count == 2:
+            index = args[0]
+            new_str = self._encoded_str[:index] + value._encoded_str + self._encoded_str[index+1:]
+        elif arg_count == 3:
+            start = args[0]
+            stop = args[1]
+            new_str = self._encoded_str[:start] + value._encoded_str + self._encoded_str[stop:]
+        else:
+            raise Rb2PyValueError("String.set_index() unsupported argument count: {}".format(arg_count))
+        result = String(encoded_str=new_str, encoding=self._encoding)
+        return result
+
     def __hash__(self):
         if self._hash is None:
             self._ensure_bytes()

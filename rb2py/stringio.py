@@ -82,8 +82,11 @@ class StringIO:
         else:
             raise Rb2PyValueError("Unsupported rb2py.StringIO.seek() whence value '{}'".format(whence))
 
+    def tell(self):
+        return self.index
+
     def string(self):
         return self._string
 
-    def tell(self):
-        return self.index
+    def is_eof(self):
+        return self.index == len(self._string)
