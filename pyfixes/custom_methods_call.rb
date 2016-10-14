@@ -76,7 +76,6 @@ CUSTOM_METHODS_CALL = {
     'sort' => [0],
     'step' => [2],
     'String' => [:global, 1],
-    'succ!' => [0],
     'times' => [0],
     'to_a'=> [0],
     'to_f' => [0],
