@@ -98,7 +98,7 @@ class ClassOrModuleNode < Node
     @original_fullname or fullname
   end
   def save_original_fullname
-    @original_fullname = fullname
+    @original_fullname = fullname unless @original_fullname
   end
 
   private

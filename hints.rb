@@ -41,6 +41,8 @@ $HINTS_IMPORTS_ADD = %w(
 )
 
 
+# Each step flattens only one level. If you want to flatten more levels,
+# see below how it's done for the FormatX0 class.
 $HINTS_FLATTEN_CLASSES = %w[
   Prawn::Document::BoundingBox
   Prawn::Document::ColumnBox
@@ -56,4 +58,9 @@ $HINTS_FLATTEN_CLASSES = %w[
   TTFunk::Table::Post::Format20
   TTFunk::Table::Post::Format30
   TTFunk::Table::Post::Format40
+  TTFunk::Table::Format10
+  TTFunk::Table::Format20
+  TTFunk::Table::Format30
+  TTFunk::Table::Format40
 ]
+
