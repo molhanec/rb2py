@@ -5,6 +5,11 @@ class ClassNode
     includes = filter_children IncludeNode
     $pygen.class(@class_name, ($pygen.py_class_name ancestor.to_s), decorators, includes) do
 
+      # Generate static attributes first so we don't overwrite explicit initialization
+      for child in filter_children AttributeStaticNode
+        $pygen.statement child
+      end
+
       gen_init
 
       for child in children
