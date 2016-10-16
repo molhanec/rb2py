@@ -19,7 +19,7 @@ class DeleteIfNode
     statement_list, statement_list_child = current_statement_list
 
     #   rb2py.delete_if(_block_XXXX, array)
-    call = make_rb2py_call 'delete_if', NewValueNode.new(nil, block_name), target
+    call = make_rb2py_call 'delete_if', target, NewValueNode.new(nil, block_name)
 
     # if we place the block definition just before ourselves
     statement_list_child = call if statement_list_child == self
