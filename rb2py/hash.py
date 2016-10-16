@@ -2,7 +2,7 @@ import collections
 
 _NotSpecified = object()
 
-class Hash:
+class Hash(collections.abc.MutableMapping):
 
     def __init__(self, default_value=None):
         self.d = collections.OrderedDict()

@@ -118,7 +118,7 @@ def abs0(integer):
 # list << value -> list
 def append(collection, value):
     # list
-    if isinstance(collection, list):
+    if isinstance(collection, ArrayABC):
         collection.append(value)
         return collection
     # standard integer shift
@@ -309,7 +309,7 @@ def delete1(container, obj):
 # ary.delete_if { |item| block } -> ary
 # Deletes every element of self for which block evaluates to true.
 # The array is changed instantly every time the block is called, not after the iteration is over.
-def delete_if0_array(block, array):
+def delete_if_array(array, block):
     index = 0
     while index < len(array):
         item = array[index]
@@ -322,7 +322,7 @@ def delete_if0_array(block, array):
 
 # hsh.delete_if {| key, value | block } -> hsh
 # Deletes every key-value pair from hsh for which block evaluates to true.
-def delete_if0_hash(block, hash):
+def delete_if_hash(hash, block):
     keys_copy = list(hash.keys())
     for key in keys_copy:
         value = hash[key]
@@ -332,10 +332,10 @@ def delete_if0_hash(block, hash):
 
 
 @emulated('delete_if')
-@special_implementation(ArrayABC, delete_if0_array)
-@special_implementation(HashABC, delete_if0_hash)
-def delete_if0(block, array):
-    raise Rb2PyNotImplementedError('DeleteIf for container type %s' % type(container))
+@special_implementation(ArrayABC, delete_if_array)
+@special_implementation(HashABC, delete_if_hash)
+def delete_if(collection, block):
+    raise Rb2PyNotImplementedError('rb2py.delete_if for container type %s' % type(collection))
 
 
 # collection.detect { predicate } -> element or None
@@ -350,7 +350,7 @@ def detect(block, collection):
 # left - right
 def difference(left, right):
     # handle array difference
-    if isinstance(left, list) and isinstance(right, list):
+    if isinstance(left, ArrayABC) and isinstance(right, ArrayABC):
         s = set(right)
         return [value for value in left if value not in s]
     else:
@@ -375,7 +375,7 @@ def downcase0(string):
 
 # Used in for-in loop
 def each(object):
-    if isinstance(object, dict):
+    if isinstance(object, HashABC):
         # For dictionaries return (key, value) tuples
         return object.items()
     else:
@@ -480,7 +480,7 @@ def flatten0(array):
     result = []
     def real_flatten(array):
         for item in array:
-            if isinstance(item, list) or isinstance(item, tuple):
+            if isinstance(item, ArrayABC) or isinstance(item, tuple):
                 real_flatten(item)
             else:
                 result.append(item)
@@ -525,7 +525,7 @@ def get_index(collection, *args):
         return collection(*args)
     if 0 < len(args) <= 2:
         index = args[0]
-        if isinstance(index, list):
+        if isinstance(index, ArrayABC):
             index = tuple(index) # in Python list is not hashable, but tuple is
         default = args[1] if len(args) == 2 else None
     else:
@@ -595,13 +595,13 @@ def hash_block(block):
 
 @emulated('__hash__')
 def hash0(object):
-    if isinstance(object, list):
+    if isinstance(object, ArrayABC):
         return hash(tuple(object))
     return hash(object)
 
 
 # list.index(value) -> int/nil
-@emulated('index', exception=list)
+@emulated('index', exception=ArrayABC)
 def index1(collection, value):
     if value in collection:
         return collection.index(value)
@@ -953,7 +953,7 @@ def is_respond_to1(object, method_name):
 
 # array.reverse -> new_array
 # Returns a new array containing self's elements in reverse order.
-@emulated('reverse', exception=list) # list has reverse() method which reverses list in place and returns None.
+@emulated('reverse', exception=ArrayABC) # list has reverse() method which reverses list in place and returns None.
 def reverse0(array):
     return list(reversed(array))
 
@@ -1020,7 +1020,7 @@ def set_index(collection, *indices_and_value):
     indices_count = len(indices)
     if indices_count == 1:
         index = indices[0]
-        if isinstance(index, list): # list is not hashable
+        if isinstance(index, ArrayABC): # list is not hashable
             index = tuple(index)
         collection[index] = value
     # elif indices_count == 2: # start and count
@@ -1075,7 +1075,7 @@ def size0(collection):
 
 
 # array.sort() -> new sorted array
-@emulated('sort', exception=list) # Python's list has sort method, which sorts list in place and return None.
+@emulated('sort', exception=ArrayABC) # Python's list has sort method, which sorts list in place and return None.
 def sort0(array):
     return list(sorted(array))
 
@@ -1250,9 +1250,9 @@ def unshift(array, *objects):
 
 
 # hash1.update(hash2) -> hash1
-@emulated('update', exception=dict) # Python's dict has "update" method which returns None.
+@emulated('update', exception=HashABC) # Python's dict has "update" method which returns None.
 def update1(hash1, hash2):
-    if isinstance(hash1, dict):
+    if isinstance(hash1, HashABC):
         hash1.update(hash2)
         return hash1
     else:

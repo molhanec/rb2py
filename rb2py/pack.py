@@ -1,4 +1,3 @@
-from argparse import _ActionsContainer
 from itertools import count
 
 __all__ = ['get_packer']
@@ -32,6 +31,11 @@ class Packer:
             self.total_byte_size -= self.total_byte_size % self.byte_size
         else:
             self.total_byte_size = self.count * self.byte_size
+            if len(bytes) < self.total_byte_size:
+                raise Rb2PyValueError()
+                self.total_byte_size = len(bytes)
+                # Make sure that total_byte_size is multiply of byte_size
+                self.total_byte_size -= self.total_byte_size % self.byte_size
         for i in range(0, self.total_byte_size, self.byte_size):
             result.append(self.unpack_single(bytes[i:i+self.byte_size]))
 

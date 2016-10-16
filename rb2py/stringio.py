@@ -7,8 +7,8 @@ from rb2py.error import *
 
 class StringIO:
     
-    def __init__(self, string=rb2py.String()):
-        self._string = string
+    def __init__(self, string=None):
+        self._string = string if string else rb2py.String()
         self.index = 0
 
     def __len__(self):
@@ -24,10 +24,13 @@ class StringIO:
     @_pos.setter
     def _pos(self, value):
         self.index = value
-    _pos_setter = _pos
+
+    def _pos_setter(self, value):
+        self.index = value
+    _pos_setter = property(None, _pos_setter, None)
 
     def _set_pos(self, value):
-        self._pos = value
+        self.index = value
 
     def append(self, string):
         self._string.append(string)

@@ -13,6 +13,7 @@ from functools import total_ordering
 import rb2py.pack
 from rb2py.error import *
 from rb2py.pathname import Pathname
+from rb2py.string_succ import succ
 from rb2py.symbolcls import Symbol
 
 
@@ -107,19 +108,23 @@ class String:
 
     def set_index(self, *args):
         value = args[-1]
-        value._ensure_encoded_str()
-        self._ensure_encoded_str()
+        if value.encoding() != self.encoding():
+            value = String(value)
+            value._set_encoding(self._encoding)
+        value._ensure_bytes()
+        self._ensure_bytes()
+        result = String(bytes=self._bytes, encoding=self._encoding)
+        result._modify_bytes()
         arg_count = len(args)
         if arg_count == 2:
             index = args[0]
-            new_str = self._encoded_str[:index] + value._encoded_str + self._encoded_str[index+1:]
+            result._bytes[index] = value._bytes
         elif arg_count == 3:
             start = args[0]
-            stop = args[1]
-            new_str = self._encoded_str[:start] + value._encoded_str + self._encoded_str[stop:]
+            stop = start + args[1]
+            result._bytes[start:stop] = value._bytes
         else:
             raise Rb2PyValueError("String.set_index() unsupported argument count: {}".format(arg_count))
-        result = String(encoded_str=new_str, encoding=self._encoding)
         return result
 
     def __hash__(self):
@@ -147,6 +152,10 @@ class String:
         string = self._encoded_str % args
         return String(string, encoding=self._encoding)
 
+    def __mul__(self, count):
+        self._ensure_encoded_str()
+        return String(encoded_str=self._encoded_str*count, encoding=self._encoding)
+
     def __str__(self):
         self._ensure_encoded_str()
         return self._encoded_str
@@ -172,8 +181,9 @@ class String:
                 except UnicodeEncodeError:
                     # Try to switch the encoding
                     if self._encoding == 'latin1': self._encoding = 'UTF-8'
-                    elif self._encoding == 'UTF-8': self._encoding = 'latin1'
-                    else: raise Rb2PyNotImplementedError("Unknown encoding {}".format(self._encoding))
+                    else: self._encoding = 'latin1'
+                    # elif self._encoding == 'UTF-8': self._encoding = 'latin1'
+                    # else: raise Rb2PyNotImplementedError("Unknown encoding {}".format(self._encoding))
                     self._bytes = list(self._encoded_str.encode(str(self._encoding)))
             else:
                 self._bytes = []
@@ -620,6 +630,28 @@ class String:
     def rstrip(self):
         self._ensure_encoded_str()
         return String(self._encoded_str.rstrip(), encoding=self._encoding)
+
+    #  Returns the successor to <i>str</i>. The successor is calculated by
+    #  incrementing characters starting from the rightmost alphanumeric (or
+    #  the rightmost character if there are no alphanumerics) in the
+    #  string. Incrementing a digit always results in another digit, and
+    #  incrementing a letter results in another letter of the same case.
+    #  Incrementing nonalphanumerics uses the underlying character set's
+    #  collating sequence.
+    #
+    #  If the increment generates a ``carry,'' the character to the left of
+    #  it is incremented. This process repeats until there is no carry,
+    #  adding an additional character if necessary.
+    #
+    #     "abcd".succ        #=> "abce"
+    #     "THX1138".succ     #=> "THX1139"
+    #     "<<koala>>".succ   #=> "<<koalb>>"
+    #     "1999zzz".succ     #=> "2000aaa"
+    #     "ZZZ9999".succ     #=> "AAAA0000"
+    #     "***".succ         #=> "**+"
+    def beware_succ(self):
+        self._modify_encoded_str()
+        self._encoded_str = succ(self._encoded_str)
 
     def pack(self, array, format):
         format = str(format)
