@@ -31,6 +31,7 @@ $HINTS_IMPORTS = {
   'forwardable' => :remove,
   'pdf/core/byte_string' => :remove,
   'pdf/core/text' => :remove,
+  'set' => :remove,
   'ttfunk' => 'TTFunk',
   'ttfunk/subset_collection' => :remove,
 }
