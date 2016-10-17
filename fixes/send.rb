@@ -133,9 +133,12 @@ class UnprocessedNode
     end
 
     # Handle attributes definition.
-    if target.is_a? MissingNode and
-        ['attr_accessor', 'attr_reader', 'attr_writer'].include? message_name
-      return make_attribute
+    if target.is_a? MissingNode
+      case message_name
+        when 'attr_accessor' then return (make_attribute require_getter:true, require_setter:true)
+        when 'attr_reader' then return (make_attribute require_getter:true)
+        when 'attr_writer' then return (make_attribute require_setter:true)
+      end
     end
 
     target = make_target(target)
