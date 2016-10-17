@@ -121,6 +121,8 @@ class String:
             result._bytes[index] = value._bytes
         elif arg_count == 3:
             start = args[0]
+            if start < 0:
+                start += len(result._bytes)
             stop = start + args[1]
             result._bytes[start:stop] = value._bytes
         else:
@@ -225,7 +227,8 @@ class String:
             self._encoded_str += object
         elif isinstance(object, int):
             self._modify_encoded_str()
-            self._encoded_str += str(object)
+            # self._encoded_str += str(object)
+            self._encoded_str += chr(object)
         else:
             raise Rb2PyValueError("Unknown type '%s' for string concatenation." % type(object))
         return self
