@@ -36,6 +36,9 @@ class StringIO:
         self._string.append(string)
         return self
 
+    def write(self, bytes):
+        self._string.append_bytes(bytes)
+
     def binmode(self):
         self._string.force_encoding('latin1')
 

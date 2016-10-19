@@ -127,7 +127,7 @@ def append(collection, value):
     elif isinstance(collection, str):
         w('String append')
         return collection + value
-    elif isinstance(collection, io.IOBase):
+    elif isinstance(collection, io.IOBase) or isinstance(collection, StringIO):
         # file-like object
         if isinstance(value, String):
             value.write_to_file(collection)

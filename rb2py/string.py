@@ -227,12 +227,10 @@ class String:
             self._encoded_str += object
         elif isinstance(object, int):
             self._modify_encoded_str()
-            # self._encoded_str += str(object)
             self._encoded_str += chr(object)
         else:
             raise Rb2PyValueError("Unknown type '%s' for string concatenation." % type(object))
         return self
-
     concat = append
 
     def append_byte(self, byte):
@@ -240,6 +238,10 @@ class String:
             raise Rb2PyValueError("String.append_byte requires integer > 0 and <= 255, value '{}' found".format(byte))
         self._modify_bytes()
         self._bytes.append(byte)
+
+    def append_bytes(self, bytes):
+        for byte in bytes:
+            self.append_byte(byte)
 
     def append_char(self, char):
         self._modify_encoded_str()
